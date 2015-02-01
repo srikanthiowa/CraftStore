@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="store">
+<head>
+	<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+</head>
+<body>
+	<script type="text/javascript" src="angular.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+	<header>
+		<h1>Flatlander Crafted Gems</h1>
+		<h2> - an Angular website - </h2>
+	</header>
+	<div ng-controller="StoreController as storeObj">
+		<ul class="list-group">
+			<li class="list-group-item" ng-repeat="product in storeObj.products | limitTo:5 | orderBy:'-price'" ng-hide="product.soldOut">
+				<h3>
+					{{product.name | uppercase}}
+					<em class="pull-right">{{product.price | currency}}</em>
+				</h3>
+				<div class="gallery">
+					<img ng-src="{{product.images[0].thumb}}">
+				</div>
+				<section ng-controller="TabController as panel">
+					<ul class="nav nav-pills">
+						<li ng-class="{active:panel.isSelected(1)}"> 
+							<a href ng-click="panel.selectTab(1)">Description</a>
+						</li>
+						<li ng-class="{active:panel.isSelected(2)}">
+							<a href ng-click="panel.selectTab(2)">Specifications</a>
+						</li>
+						<li ng-class="{active:panel.isSelected(3)}">
+							<a href ng-click="panel.selectTab(3)">reviews</a>
+						</li>
+					</ul>
+					<div class="panel" ng-show="panel.isSelected(1)">
+						<h4>Description</h4>
+						<p>{{product.description}}</p>
+					</div>
+					<div class="panel" ng-show="panel.isSelected(2)">
+						<h4>Specifications</h4>
+						<blockquote>None yet</blockquote>
+					</div>
+					<div class="panel" ng-show="panel.isSelected(3)">
+						<h4>Reviews</h4>
+						<blockquote ng-repeat="review in product.reviews">
+							<b>Stars: {{review.stars}}</b>
+							{{review.body}}
+							<cite>by: {{review.author}}</cite>
+						</blockquote>
+						<form name="reviewForm">
+							<blockquote>
+								<b>Stars: {{review.stars}}</b>
+								{{review.body}}
+								<cite>by: {{review.author}}</cite>
+							</blockquote>
+							<select ng-model="review.stars">
+								<option value="1">1 Star</option>
+								<option value="2">2 Star</option>
+								<option value="3">3 Star</option>
+								<option value="4">4 Star</option>
+								<option value="5">5 Star</option>
+							</select>
+							<textarea ng-model="review.body"></textarea>
+							<label>by:</label>
+							<input type="email" ng-model="review.author"></input>
+							<input type="submit" value="Submit" />
+						</form>
+					</div>
+				</section>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
